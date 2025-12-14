@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class viva2_q2 {
+public class Q2 {
 
     public static boolean isBalanced(String str) {
         int count = 0;
