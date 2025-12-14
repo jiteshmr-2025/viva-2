@@ -7,13 +7,18 @@ public class Q5 {
         Scanner sc = new Scanner(System.in);
 
         System.out.print("Mode (C/D): ");
-        char mode = sc.nextLine().charAt(0);
+        char mode = Character.toUpperCase(sc.nextLine().charAt(0));
 
         System.out.print("Text: ");
         String text = sc.nextLine();
 
         if (mode == 'C') {
-            System.out.println("Result: " + compress(text));
+            String output = compress(text);
+            if (output.equals("Invalid encoding.")) {
+                System.out.println(output);
+            } else {
+                System.out.println("Result: " + output);
+            }
         } 
         else if (mode == 'D') {
             String output = decompress(text);
@@ -29,6 +34,11 @@ public class Q5 {
     public static String compress(String s) {
         //check whether is empty string
         if (s.length() == 0) return "";
+
+        for(int i=0;i<s.length();i++){ 
+            if(Character.isDigit(s.charAt(i))) 
+                return "Invalid encoding.";
+        }
 
         StringBuilder result = new StringBuilder();
         int count = 1;
