@@ -9,8 +9,7 @@ import java.util.Scanner;
 public class Q4 {
 
     /**
-     * 1. Read the three board rows from the user. 
-     * 2. Construct a 2D array of
+     * 1. Read the three board rows from the user. 2. Construct a 2D array of
      * characters. 3. Call checkWinner() to determine the result. 4. Display the
      * output as: a. "Winner: X" or "Winner: O" if a player has won, b. "No
      * winner" if the game has no winning line.
@@ -58,6 +57,8 @@ public class Q4 {
                     System.out.println("Winner: 'X' ");
                 case 'O' ->
                     System.out.println("Winner: 'O' ");
+                case 'I' ->
+                    System.out.println("Invalid board, 2 winners at the same time.");
                 default ->
                     System.out.println("No winner.");
             }
@@ -92,6 +93,12 @@ public class Q4 {
      */
     public static char checkWinner(char[][] board) {
         // Check if the same symbol appears in any complete row, column, or one of the two diagonals.
+        // Define size for board first
+        int size = board[0].length;
+
+        // Now, create booleans to check if both x and O wins.
+        boolean xWin = false;
+        boolean oWin = false;
 
         // Check row and column
         int countRowX = 0;
@@ -103,29 +110,29 @@ public class Q4 {
                 // Check rows
                 if (board[i][j] == 'X') {
                     countRowX++;
-                    if (countRowX == 3) {
-                        return 'X';
+                    if (countRowX == size) {
+                        xWin = true;
                     }
                 }
                 if (board[i][j] == 'O') {
                     countRowY++;
-                    if (countRowY == 3) {
-                        return 'O';
+                    if (countRowY == size) {
+                        oWin = true;
                     }
                 }
 
                 // Check columns
                 if (board[j][i] == 'X') {
                     countColX++;
-                    if (countColX == 3) {
-                        return 'X';
+                    if (countColX == size) {
+                        xWin = true;
                     }
                 }
 
                 if (board[j][i] == 'O') {
                     countColY++;
-                    if (countColY == 3) {
-                        return 'O';
+                    if (countColY == size) {
+                        oWin = true;
                     }
                 }
             }
@@ -147,33 +154,43 @@ public class Q4 {
         int countDiagForwardY = 0;
         int countDiagBackX = 0;
         int countDiagBackY = 0;
+
         for (int i = 0; i < board.length; i++) {
-            for (int j = i; j <= i; j++) {
-                if (board[i][j] == 'X') {
-                    countDiagForwardX++;
-                    if (countDiagForwardX == 3) {
-                        return 'X';
-                    }
-                }
-                if (board[i][j] == 'O') {
-                    countDiagForwardY++;
-                    if (countDiagForwardY == 3) {
-                        return 'O';
-                    }
-                }
-                if (board[i][2 - j] == 'X') {
-                    countDiagBackX++;
-                    if (countDiagBackX == 3) {
-                        return 'X';
-                    }
-                }
-                if (board[i][2 - j] == 'O') {
-                    countDiagBackY++;
-                    if (countDiagBackY == 3) {
-                        return 'O';
-                    }
+            if (board[i][i] == 'X') {
+                countDiagForwardX++;
+                if (countDiagForwardX == size) {
+                    xWin = true;
                 }
             }
+            if (board[i][i] == 'O') {
+                countDiagForwardY++;
+                if (countDiagForwardY == size) {
+                    oWin = true;
+                }
+            }
+            if (board[i][board.length - 1 - i] == 'X') {
+                countDiagBackX++;
+                if (countDiagBackX == size) {
+                    xWin = true;
+                }
+            }
+            if (board[i][board.length - 1 - i] == 'O') {
+                countDiagBackY++;
+                if (countDiagBackY == size) {
+                    oWin = true;
+                }
+            }
+        }
+
+        // --- 3. Final Validation ---
+        if (xWin && oWin) {
+            return 'I'; // Invalid: Both players won
+        }
+        if (xWin) {
+            return 'X';
+        }
+        if (oWin) {
+            return 'O';
         }
 
         return '.';
